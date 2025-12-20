@@ -1,0 +1,69 @@
+# Dependencies
+node_modules
+.pnpm-store
+.pnpm-debug.log
+
+# Build outputs
+dist
+dist-ssr
+.output
+.nitro
+build
+*.tsbuildinfo
+
+# TanStack Start specific
+.tanstack
+.vinxi
+routeTree.gen.ts
+
+# Cloudflare Workers (if deploying to CF)
+.wrangler
+
+# Nx
+.nx/cache
+.nx/workspace-data
+
+# Environment variables
+.env
+.env.local
+.env*.local
+!.env.example
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea
+*.swp
+*.swo
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vite
+.vite
+*.local
+
+# Testing
+coverage
+.nyc_output
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+.cache
+
+# App-specific (optional - uncomment if needed)
+# count.txt
+# todos.json
