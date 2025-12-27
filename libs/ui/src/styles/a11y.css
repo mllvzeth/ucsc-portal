@@ -1,0 +1,114 @@
+/**
+ * Accessibility Utility Classes for UCSC Assessment Hub
+ * 
+ * CSS utilities for improving accessibility and meeting WCAG 2.1 AA standards.
+ * 
+ * @module a11y
+ */
+
+/**
+ * Screen Reader Only
+ * 
+ * Visually hides an element while keeping it accessible to screen readers.
+ * Useful for labels, skip links, and other content that should be read
+ * but not displayed visually.
+ * 
+ * Usage: <span className="sr-only">Accessible label</span>
+ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/**
+ * Screen Reader Only - Focusable
+ * 
+ * Makes a screen-reader-only element visible when focused.
+ * Useful for skip links that should appear when tabbed to.
+ * 
+ * Usage: <a href="#main" className="sr-only focus:not-sr-only">Skip to main content</a>
+ */
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/**
+ * Focus Visible
+ * 
+ * Enhanced focus indicator that only shows for keyboard navigation
+ * (not mouse clicks). This is built into Tailwind with focus-visible:
+ * but can be used as a standalone class if needed.
+ */
+.focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/**
+ * Skip Link
+ * 
+ * Combination of sr-only and focus styles for skip navigation links.
+ * Appears at the top of the page when tabbed to.
+ * 
+ * Usage: <a href="#main" className="skip-link">Skip to main content</a>
+ */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  z-index: 9999;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/**
+ * High Contrast Mode Support
+ * 
+ * Ensures elements remain visible in Windows High Contrast Mode.
+ * Uses transparent borders that become visible in HCM.
+ */
+@media (prefers-contrast: high) {
+  .button,
+  .input,
+  .card {
+    border: 2px solid currentColor;
+  }
+}
+
+/**
+ * Reduced Motion Support
+ * 
+ * Respects user's preference for reduced motion.
+ * Disables animations and transitions for users who prefer less motion.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

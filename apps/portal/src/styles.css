@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "../../../libs";
 
 body {
   @apply m-0;

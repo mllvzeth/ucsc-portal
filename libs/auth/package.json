@@ -2,5 +2,8 @@
   "name": "@ucsc-hub/auth",
   "version": "0.0.1",
   "type": "module",
-  "main": "./src/index.ts"
+  "main": "./src/index.ts",
+  "dependencies": {
+    "oidc-client-ts": "^3.4.1"
+  }
 }

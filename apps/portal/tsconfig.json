@@ -23,7 +23,13 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/auth": ["../../libs/auth/src/index.ts"],
+      "@/auth/*": ["../../libs/auth/src/*"],
+      "@/ui": ["../../libs/ui/src/index.ts"],
+      "@/ui/*": ["../../libs/ui/src/*"],
+      "@/api": ["../../libs/api-client/src/index.ts"],
+      "@/api/*": ["../../libs/api-client/src/*"]
     }
   }
 }
