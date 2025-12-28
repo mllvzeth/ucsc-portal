@@ -148,9 +148,6 @@ export function useKeyboardNav(
       const { key } = event;
 
       // Determine if we should handle this key based on orientation
-      const isVerticalKey = key === 'ArrowUp' || key === 'ArrowDown';
-      const isHorizontalKey = key === 'ArrowLeft' || key === 'ArrowRight';
-      
       const shouldHandleVertical =
         orientation === 'vertical' || orientation === 'both';
       const shouldHandleHorizontal =

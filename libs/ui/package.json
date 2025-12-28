@@ -2,5 +2,13 @@
   "name": "@ucsc-hub/ui",
   "version": "0.0.1",
   "type": "module",
-  "main": "./src/index.ts"
+  "main": "./src/index.ts",
+  "peerDependencies": {
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
+  }
 }

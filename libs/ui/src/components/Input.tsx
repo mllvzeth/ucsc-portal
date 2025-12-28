@@ -16,7 +16,7 @@
  * @module Input
  */
 
-import React, { forwardRef, useState, type InputHTMLAttributes } from 'react';
+import { forwardRef, useState, type InputHTMLAttributes } from 'react';
 
 /**
  * Input type variants

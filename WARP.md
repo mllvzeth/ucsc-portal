@@ -104,11 +104,12 @@ import { useQuery } from '@/api/queries/assessments'
 - `context/AuthProvider.tsx` - Production-ready React context for global auth state
 
 **Authentication System:**
-- **Flow:** OAuth2/OIDC with authorization code flow
+- **Flow:** SAML 2.0 via SimpleSAMLphp (matching UC production infrastructure)
 - **Session Management:** LocalStorage persistence with automatic refresh
 - **Session Validation:** Periodic checks (1 min intervals), idle timeout (30 min), auto-refresh (5 min before expiry)
-- **Security:** PKCE support, state/nonce parameters, secure token handling
+- **Security:** SAML assertions, secure token handling
 - **Type Safety:** Fully typed with guards (`isRole`, `isAuthError`)
+- **SAML Library:** `@node-saml/passport-saml` for SAML 2.0 integration
 
 **User Roles:** `student`, `instructor`, `admin`, `staff`
 
@@ -162,10 +163,11 @@ const { user, isAuthenticated, login, logout, hasRole } = useAuthContext()
 Copy `.env.example` to `.env` and configure:
 
 ```bash
-# OAuth2/OIDC (Phase 2 - not yet implemented)
-VITE_OAUTH_CLIENT_ID=your-client-id
-VITE_OAUTH_AUTHORITY=https://auth.ucsc.edu
-VITE_OAUTH_REDIRECT_URI=http://localhost:3000/auth/callback
+# SAML Configuration
+VITE_SAML_ENTRY_POINT=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
+VITE_SAML_ISSUER=http://localhost:3000
+VITE_SAML_CALLBACK_URL=http://localhost:3000/auth/saml/callback
+VITE_SAML_IDP_CERT=<certificate-from-idp>
 
 # API Gateway (Phase 2)
 VITE_API_BASE_URL=http://localhost:3333
@@ -178,6 +180,38 @@ NODE_ENV=development
 VITE_ENABLE_ANALYTICS=false
 VITE_ENABLE_DEBUG=true
 ```
+
+### Local SAML IdP (Test Environment)
+
+For local development, use the `kristophjunge/test-saml-idp` Docker container to simulate UC's SimpleSAMLphp infrastructure:
+
+```bash
+# Start SAML IdP container
+docker run -d -p 8080:8080 -p 8443:8443 \
+  --name ucsc-test-idp \
+  -e SIMPLESAMLPHP_SP_ENTITY_ID=http://localhost:3000 \
+  -e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://localhost:3000/auth/saml/callback \
+  kristophjunge/test-saml-idp
+
+# Check container status
+docker ps --filter "name=ucsc-test-idp"
+
+# Stop container
+docker stop ucsc-test-idp
+
+# Remove container
+docker rm ucsc-test-idp
+```
+
+**IdP Endpoints:**
+- **HTTP:** http://localhost:8080/simplesaml/
+- **HTTPS:** https://localhost:8443/simplesaml/
+- **SSO Service:** http://localhost:8080/simplesaml/saml2/idp/SSOService.php
+- **Metadata:** http://localhost:8080/simplesaml/saml2/idp/metadata.php
+
+**Test Users:**
+- Username: `user1` / Password: `user1pass`
+- Username: `user2` / Password: `user2pass`
 
 ## WCAG 2.1 AA Accessibility
 
@@ -273,3 +307,11 @@ See `docs/prd_phase1_foundation.md` for comprehensive Phase 1 plan and Phase 2+ 
 4. **Type Safety:** Strict TypeScript - no `any` types without explicit justification
 5. **Error Handling:** Use `AuthError` type for auth-related errors with proper error codes
 6. **Imports:** Use path aliases (`@/auth/*`, `@/ui/*`, `@/api/*`) for shared library imports
+
+## TanStack Start Common Pitfalls
+
+**API Route Export Name:**
+- ❌ `export const APIRoute = createAPIFileRoute(...)` — WRONG
+- ✅ `export const Route = createAPIFileRoute(...)` — CORRECT
+
+TanStack Start requires ALL route exports (including API routes) to be named `Route`. Using `APIRoute` or any other name will cause the error: `Route file "..." does not contain any route piece.`

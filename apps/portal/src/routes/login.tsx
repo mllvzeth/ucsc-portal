@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { useAuthContext } from '@/auth';
 import { Button } from '@/ui';
 import { useEffect } from 'react';
@@ -8,7 +8,7 @@ export const Route = createFileRoute('/login')({
 });
 
 function LoginPage() {
-  const { login, isAuthenticated } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
   const navigate = Route.useNavigate();
 
   useEffect(() => {
@@ -24,9 +24,11 @@ function LoginPage() {
           Sign in to Assessment Hub
         </h2>
         <div className="mt-8">
-          <Button onClick={() => login()} size="lg" fullWidth>
-            Sign in with UCSC ID
-          </Button>
+          <Link to="/auth/saml/login">
+            <Button size="lg" fullWidth>
+              Sign in with UCSC ID
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

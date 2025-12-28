@@ -15,7 +15,7 @@
  * @module Button
  */
 
-import React, { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
 
 /**
  * Button variant types defining visual styles

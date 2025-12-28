@@ -1,4 +1,5 @@
-import React, { 
+import type React from 'react';
+import { 
   createContext, 
   useContext, 
   useEffect, 
@@ -19,7 +20,7 @@ import type {
 } from '../types/auth.types';
 
 // Enable OIDC logging in development
-if (import.meta.env.DEV) {
+if (typeof import.meta !== 'undefined' && (import.meta as { env?: { DEV?: boolean } }).env?.DEV) {
   Log.setLogger(console);
   Log.setLevel(Log.INFO);
 }
@@ -73,18 +74,27 @@ const mapOidcUserToSession = (oidcUser: OidcUser): Session => {
     refreshToken: oidcUser.refresh_token || '',
     expiresAt: new Date(oidcUser.expires_at! * 1000),
     idToken: oidcUser.id_token,
-    scopes: oidcUser.scope.split(' '),
+    scopes: oidcUser.scope?.split(' ') ?? [],
   };
+};
+
+// Helper to safely access Vite env vars
+const getEnvVar = (key: string, fallback: string): string => {
+  if (typeof import.meta !== 'undefined') {
+    const env = (import.meta as { env?: Record<string, string> }).env;
+    return env?.[key] ?? fallback;
+  }
+  return fallback;
 };
 
 export function AuthProvider({
   children,
-  authority = import.meta.env.VITE_OAUTH_AUTHORITY || 'https://auth.ucsc.edu',
-  clientId = import.meta.env.VITE_OAUTH_CLIENT_ID || '',
-  redirectUri = import.meta.env.VITE_OAUTH_REDIRECT_URI || 'http://localhost:3000/auth/callback',
+  authority = getEnvVar('VITE_OAUTH_AUTHORITY', 'https://auth.ucsc.edu'),
+  clientId = getEnvVar('VITE_OAUTH_CLIENT_ID', ''),
+  redirectUri = getEnvVar('VITE_OAUTH_REDIRECT_URI', 'http://localhost:3000/auth/callback'),
   onSessionRestored,
   onSessionRestoreFailed,
-}: AuthProviderProps): JSX.Element {
+}: AuthProviderProps): React.JSX.Element {
   
   // Initialize UserManager
   const userManager = useMemo(() => {

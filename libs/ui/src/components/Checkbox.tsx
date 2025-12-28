@@ -14,7 +14,7 @@
  * @module Checkbox
  */
 
-import React, { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react';
+import React, { forwardRef, type InputHTMLAttributes } from 'react';
 
 /**
  * Checkbox component props interface
